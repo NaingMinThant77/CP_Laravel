@@ -1,0 +1,21 @@
+info:
+  name: Update
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{DEV_API}}/categories/1"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Lighting"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
