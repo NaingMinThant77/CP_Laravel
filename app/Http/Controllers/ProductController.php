@@ -36,7 +36,12 @@ class ProductController extends Controller
     public function store(StoreRequest $request)
     {
          try {
-            $product = Product::create($request->validated());
+            $data = $request -> validated();
+            if($request->hasFile('image_url')) {
+                $path = $request->file('image_url')->store('products', 'public');
+                $data['image_url'] = $path;
+            }
+            $product = Product::create($data);
             return response()->json([
                 'message' => 'Product created successfully',
                 'data' => ProductResource::make($product)

@@ -7,14 +7,24 @@ http:
   method: POST
   url: "{{DEV_API}}/products"
   body:
-    type: json
-    data: |-
-      {
-        "name": "Product 1",
-        "category_id": 1,
-        "description": "This is Product 1 description",
-        "price": 22.4
-      }
+    type: multipart-form
+    data:
+      - name: name
+        type: text
+        value: Product 1
+      - name: category_id
+        type: text
+        value: "1"
+      - name: description
+        type: text
+        value: This is description
+      - name: price
+        type: text
+        value: "22.2"
+      - name: image_url
+        type: file
+        value:
+          - C:\Users\Surface\Pictures\For Photos\coder.png
   auth: inherit
 
 settings:

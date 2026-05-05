@@ -5,7 +5,11 @@ info:
 
 http:
   method: GET
-  url: "{{DEV_API}}/categories"
+  url: "{{DEV_API}}/categories?search=u"
+  params:
+    - name: search
+      value: u
+      type: query
   auth: inherit
 
 settings:
