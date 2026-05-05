@@ -27,7 +27,7 @@ class UpdateRequest extends FormRequest
             'name' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
             'price' => 'sometimes|numeric|min:0',
-            'image_url' => 'sometimes|string'
+            'image_url' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:20480',
         ];
     }
 }

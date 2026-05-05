@@ -8,6 +8,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -90,7 +91,17 @@ class ProductController extends Controller
                     'message' => 'Product not found'
                 ], 404);
             }
-            $product->update($request->validated());
+            
+            $data = $request -> validated();
+            if($request->hasFile('image_url')) {
+                if($product->image_url) {
+                    Storage::disk('public')->delete($product->image_url);
+                }
+                $path = $request->file('image_url')->store('products', 'public');
+                $data['image_url'] = $path;
+            }
+            $product->update($data);
+            $product->update();
             return response()->json([
                 'message' => 'Product updated successfully',
                 'data' => ProductResource::make($product)
@@ -115,7 +126,11 @@ class ProductController extends Controller
                     'message' => 'Product not found'
                 ], 404);
             }
+            if($product->image_url) {
+                Storage::disk('public')->delete($product->image_url);
+            }
             $product->delete();
+            
             return response()->json([
                 'message' => 'Product deleted successfully'
             ], 200);
