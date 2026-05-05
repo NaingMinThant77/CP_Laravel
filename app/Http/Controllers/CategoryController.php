@@ -11,9 +11,13 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
         try {
-            $categories = Category::all();
+            $query = Category::query();
+            if($request->has('search')) {
+                $query->where('name', 'like', '%'.$request->search.'%');
+            }
+            $categories = $query->get();
             return response()->json([
                 'message' => 'Categories fetched successfully',
                 'data' => CategoryResource::collection($categories)
