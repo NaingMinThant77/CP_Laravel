@@ -6,6 +6,14 @@ info:
 http:
   method: PUT
   url: "{{DEV_API}}/products/1"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Product 2",
+        "description": "This is Product 2 description",
+        "price": 22
+      }
   auth: inherit
 
 settings:
