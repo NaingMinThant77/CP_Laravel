@@ -1,58 +1,194 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Category & Product Management API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel REST API for managing categories and products with Cloudinary image upload functionality.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Category Management**: Create, read, update, and delete categories
+- **Product Management**: Full CRUD operations for products
+- **Cloudinary Integration**: Upload and delete images using Cloudinary cloud storage
+- **API Testing**: Bruno collection for comprehensive API testing
+- **Database**: SQLite database with migrations and seeders
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 11
+- **Database**: SQLite
+- **Image Storage**: Cloudinary
+- **API Testing**: Bruno
+- **Authentication**: Laravel Sanctum (ready for implementation)
 
-## Learning Laravel
+## Cloudinary Integration
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+This application uses Cloudinary for image storage and management. Images are uploaded to Cloudinary when creating or updating products, and automatically deleted when products are removed.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Cloudinary Configuration
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Add the following environment variables to your `.env` file:
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```env
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_KEY=your_api_key
+CLOUDINARY_SECRET=your_api_secret
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Image Upload Features
+
+- **Automatic Upload**: Images are uploaded to specified folders (e.g., `products`)
+- **SSL Bypass**: Configured to work in development environments with SSL verification disabled
+- **Automatic Deletion**: Images are automatically deleted from Cloudinary when products are deleted
+- **Public ID Extraction**: Smart extraction of Cloudinary public IDs from URLs for deletion
+
+## API Endpoints
+
+### Categories
+
+- `GET /api/categories` - List all categories
+- `POST /api/categories` - Create a new category
+- `GET /api/categories/{id}` - Get specific category
+- `PUT /api/categories/{id}` - Update category
+- `DELETE /api/categories/{id}` - Delete category
+
+### Products
+
+- `GET /api/products` - List all products
+- `POST /api/products` - Create a new product (with image upload)
+- `GET /api/products/{id}` - Get specific product
+- `PUT /api/products/{id}` - Update product (with image replacement)
+- `DELETE /api/products/{id}` - Delete product (with image deletion)
+
+## API Testing with Bruno
+
+This project includes a comprehensive Bruno collection for API testing located in the `bruno/` directory:
+
+```
+bruno/
+├── Categories_Products/
+│   ├── Category/
+│   │   ├── Create Category.bru
+│   │   ├── Delete Category.bru
+│   │   ├── Get All Categories.bru
+│   │   ├── Get Category.bru
+│   │   └── Update Category.bru
+│   └── Product/
+│       ├── Create Product.bru
+│       ├── Delete Product.bru
+│       ├── Get All Products.bru
+│       ├── Get Product.bru
+│       └── Update Product.bru
+└── opencollection.yml
+```
+
+### Using Bruno Collections
+
+1. Install [Bruno](https://www.usebruno.com/)
+2. Open the Bruno application
+3. Import the collection from the `bruno/Categories_Products/` directory
+4. Update environment variables in Bruno if needed
+5. Run the API tests
+
+### Test Features
+
+- **Complete CRUD Coverage**: All endpoints tested
+- **Image Upload Testing**: Includes file upload scenarios
+- **Error Handling**: Tests for validation and error responses
+- **Authentication Ready**: Structure supports future auth implementation
+
+## Installation & Setup
+
+1. **Clone the repository**
+
+    ```bash
+    git clone <repository-url>
+    cd category-product-test
+    ```
+
+2. **Install dependencies**
+
+    ```bash
+    composer install
+    npm install
+    ```
+
+3. **Environment setup**
+
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
+
+4. **Configure Cloudinary**
+   Add your Cloudinary credentials to the `.env` file:
+
+    ```env
+    CLOUDINARY_CLOUD_NAME=your_cloud_name
+    CLOUDINARY_KEY=your_api_key
+    CLOUDINARY_SECRET=your_api_secret
+    ```
+
+5. **Database setup**
+
+    ```bash
+    php artisan migrate
+    php artisan db:seed
+    ```
+
+6. **Start the development server**
+    ```bash
+    php artisan serve
+    ```
+
+## Database Schema
+
+### Categories
+
+- `id` - Primary key
+- `name` - Category name
+- `description` - Category description
+- `created_at`, `updated_at` - Timestamps
+
+### Products
+
+- `id` - Primary key
+- `category_id` - Foreign key to categories
+- `name` - Product name
+- `description` - Product description
+- `price` - Product price
+- `image_url` - Cloudinary image URL
+- `created_at`, `updated_at` - Timestamps
+
+## Image Upload Service
+
+The `CloudinaryFileUploadService` handles all Cloudinary operations:
+
+### Key Methods
+
+- `upload(UploadedFile $file, string $folder)` - Upload images to specified folder
+- `delete(string $url)` - Delete images by extracting public ID from URL
+
+### Features
+
+- **SSL Verification Bypass**: Configured for development environments
+- **Folder Organization**: Images organized by type (products, etc.)
+- **Error Handling**: Comprehensive exception handling with descriptive messages
+- **Public ID Extraction**: Smart parsing of Cloudinary URLs for deletion
+
+## Development Notes
+
+- The application uses SQLite for development (configurable)
+- Images are stored in Cloudinary, not locally
+- SSL verification is disabled for Cloudinary API calls (development setup)
+- Bruno collections provide comprehensive API testing capabilities
+- Ready for authentication implementation with Laravel Sanctum
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test with Bruno collections
+5. Submit a pull request
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the MIT license.
