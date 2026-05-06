@@ -24,7 +24,7 @@ http:
       - name: image_url
         type: file
         value:
-          - C:\Users\Surface\Pictures\For Photos\coder.png
+          - C:\Users\Surface\Pictures\For Photos\female.png
   auth: inherit
 
 settings:

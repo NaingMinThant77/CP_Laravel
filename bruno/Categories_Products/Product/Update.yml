@@ -5,15 +5,14 @@ info:
 
 http:
   method: PUT
-  url: "{{DEV_API}}/products/1"
+  url: "{{DEV_API}}/products/19"
   body:
-    type: json
-    data: |-
-      {
-        "name": "Product 2",
-        "description": "This is Product 2 description",
-        "price": 22
-      }
+    type: multipart-form
+    data:
+      - name: image_url
+        type: file
+        value:
+          - C:\Users\Surface\Pictures\For Photos\coder.png
   auth: inherit
 
 settings:

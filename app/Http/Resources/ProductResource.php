@@ -22,7 +22,7 @@ class ProductResource extends JsonResource
             "name" => $this->name,
             "description" => $this->description,
             "price" => $this->price,
-            "image_url" => $this->image_url ? Storage::url($this->image_url) : null,
+            "image_url" => $this->image_url ,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at
         ];

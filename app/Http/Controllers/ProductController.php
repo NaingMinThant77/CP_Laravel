@@ -6,6 +6,7 @@ use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Services\CloudinaryFileUploadService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -26,7 +27,7 @@ class ProductController extends Controller
             ], 200);
         } catch(Exception $e) {
             return response() -> json([
-                'message' => $e->getMessage() || 'Internal Server Error'
+                'message' => $e->getMessage() ?: 'Internal Server Error'
             ], 500);
         }
     }
@@ -39,8 +40,8 @@ class ProductController extends Controller
          try {
             $data = $request -> validated();
             if($request->hasFile('image_url')) {
-                $path = $request->file('image_url')->store('products', 'public');
-                $data['image_url'] = $path;
+                $cloudinaryService = new CloudinaryFileUploadService();
+                $data['image_url'] = $cloudinaryService->upload($request->file('image_url'), 'products');
             }
             $product = Product::create($data);
             return response()->json([
@@ -50,7 +51,7 @@ class ProductController extends Controller
 
         } catch(Exception $e) {
             return response() -> json([
-                'message' => $e->getMessage() || 'Internal Server Error'
+                'message' => $e->getMessage() ?: 'Internal Server Error'
             ], 500);
         }
     }
@@ -74,7 +75,7 @@ class ProductController extends Controller
             
         } catch(Exception $e) {
             return response() -> json([
-                'message' => $e->getMessage() || 'Internal Server Error'
+                'message' => $e->getMessage() ?: 'Internal Server Error'
             ], 500);
         }
     }
@@ -94,14 +95,13 @@ class ProductController extends Controller
             
             $data = $request -> validated();
             if($request->hasFile('image_url')) {
+                $cloudinaryService = new CloudinaryFileUploadService();
                 if($product->image_url) {
-                    Storage::disk('public')->delete($product->image_url);
+                    $cloudinaryService->delete($product->image_url);
                 }
-                $path = $request->file('image_url')->store('products', 'public');
-                $data['image_url'] = $path;
+                $data['image_url'] = $cloudinaryService->upload($request->file('image_url'), 'products');
             }
             $product->update($data);
-            $product->update();
             return response()->json([
                 'message' => 'Product updated successfully',
                 'data' => ProductResource::make($product)
@@ -109,7 +109,7 @@ class ProductController extends Controller
 
         } catch(Exception $e) {
             return response() -> json([
-                'message' => $e->getMessage() || 'Internal Server Error'
+                'message' => $e->getMessage() ?: 'Internal Server Error'
             ], 500);
         }
     }
@@ -127,7 +127,8 @@ class ProductController extends Controller
                 ], 404);
             }
             if($product->image_url) {
-                Storage::disk('public')->delete($product->image_url);
+                 $cloudinaryService = new CloudinaryFileUploadService();
+                 $cloudinaryService->delete($product->image_url);
             }
             $product->delete();
             
@@ -137,7 +138,7 @@ class ProductController extends Controller
 
         } catch(Exception $e) {
             return response() -> json([
-                'message' => $e->getMessage() || 'Internal Server Error'
+                'message' => $e->getMessage() ?: 'Internal Server Error'
             ], 500);
         }
     }
